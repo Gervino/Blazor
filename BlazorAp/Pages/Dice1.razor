@@ -1,0 +1,56 @@
+﻿@page "/dice1"
+
+<h1>Roll the Dice!</h1>
+
+<button class="btn btn-primary" @onclick="ResetDice">Reset Dice</button>
+<button class="btn btn-primary" @onclick="RollDice">Roll Dice</button>
+<br />
+<br />
+
+<div>
+    <img id="dice0" src="@diceImage[0]" />
+    <img id="dice1" src="@diceImage[1]" />
+    <img id="dice2" src="@diceImage[2]" />
+    <img id="dice3" src="@diceImage[3]" />
+    <img id="dice4" src="@diceImage[4]" />
+    <img id="dice5" src="@diceImage[5]" />
+</div>
+
+@code {
+    int[] diceArray = new int[] { 1, 2, 3, 4, 5, 6 };
+    string[] diceImage = new string[6];
+    string dicePrefix = "/Img/dice";
+    string diceSuffix = ".PNG";
+
+    protected void OnInit()
+    {
+        ResetDice();
+    }
+
+    public void ResetDice()
+    {
+        for (int diceIndex = 0; diceIndex < diceArray.Length; diceIndex++)
+        {
+            var val = GetDicePath(diceIndex + 1);
+            diceImage[diceIndex] = val;
+        }
+    }
+
+    public void RollDice()
+    {
+        Random rnd = new Random();
+        int[] randomDice = diceArray.OrderBy(x => rnd.Next()).ToArray();
+
+        for (int diceIndex = 0; diceIndex < diceArray.Length; diceIndex++)
+        {
+            var val = GetDicePath(randomDice[diceIndex]);
+            diceImage[diceIndex] = val;
+        }
+    }
+
+    string GetDicePath(int diceValue)
+    {
+        string val = $"{dicePrefix}{diceValue}{diceSuffix}";
+        return val;
+    }
+}
